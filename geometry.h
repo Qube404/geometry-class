@@ -2,6 +2,7 @@
 #define GEOMETRY_H
 
 #include <array>
+#include <vector>
 #include <initializer_list>
 #include <ostream>
 #include <stdexcept>
@@ -22,7 +23,7 @@ T dot(std::array<T, N> &lhs, std::array<U, N> &rhs) {
     return r;
 }
 
-template <typename T, size_t R, size_t C = R>
+template <typename T>
 class Matrix;
 
 template <typename T>
@@ -35,121 +36,72 @@ template <typename T>
 class Vec4;
 
 // Matrix
-template <typename T, size_t R, size_t C>
+template <typename T>
 class Matrix {
 protected:
-    std::array<std::array<T, C>, R> m;
+    std::vector<T> m;
+
+    size_t rows;
+    size_t cols;
 
 public:
-    Matrix() {
+    Matrix(): m(1, 0), rows(1), cols(1) {}
+
+    Matrix(T n): m(1, n), rows(1), cols(1) {}
+
+    Matrix(size_t rows, size_t cols): m(rows * cols, 0), rows(rows), cols(cols) {}
+
+    Matrix(size_t rows, size_t cols, T n): m(rows * cols, n), rows(rows), cols(cols) {}
+
+    Matrix(T* v, size_t s): m(v, v + s), rows(1), cols(s) {}
+
+    template <size_t S>
+    Matrix(std::array<T, S> &v): m(v.begin(), v.end()), rows(1), cols(v.size()) {}
+
+    Matrix(std::initializer_list<T> v): m(v.begin(), v.end()), rows(1), cols(v.size()) {}
+
+    template <size_t C>
+    Matrix(T v[][C], size_t rows, size_t cols): m(rows * cols), rows(rows), cols(cols) {
+        for (size_t i = 0; i != rows; i++) {
+            for (size_t j = 0; j != cols; j++) {
+                m[j + i*j] = v[i][j];
+            }
+        }
+    }
+
+    template <size_t R, size_t C>
+    Matrix(std::array<std::array<T, C>, R> &v): m(R * C), rows(R), cols(C) {
         for (size_t i = 0; i != R; i++) {
             for (size_t j = 0; j != C; j++) {
-                m[i][j] = 0;
+                m[j + i*j] = v[i][j];
             }
         }
     }
 
-    Matrix(T n) {
-        for (size_t i = 0; i != R; i++) {
-            for (size_t j = 0; j != C; j++) {
-                m[i][j] = n;
-            }
-        } 
-    }
-
-    Matrix(T* v, size_t s) {
-        if (C != s) {
-            throw std::range_error("invalid size for array");
-        }
-
-        for (size_t i = 0; i != R; i++) {
-            for (size_t j = 0; j != C; j++) {
-                m[i][j] = v[j]; 
-            }
-        }
-    }
-
-    Matrix(std::array<T, C> &v) {
-        for (size_t i = 0; i != R; i++) {
-            m[i] = v;
-        }
-    }
-
-    Matrix(std::initializer_list<T> v) {
-        if (C != v.size()) {
-            throw std::range_error("invalid size for initializer list");
-        }
-
-        for (size_t i = 0; i != R; i++) {
-            size_t j = 0;
-            typename std::initializer_list<T>::iterator iter = v.begin();
-
-            while (iter != v.end()) {
-                m[i][j] = *iter;
-
-                iter++;
-                j++;
-            }
-        }
-    }
-
-    Matrix(T v[R][C], size_t s, size_t t) {
-        if (s != R || t != C) {
-            throw std::range_error("invalid size for array");
-        }
-
-        for (size_t i = 0; i != R; i++) {
-            for (size_t j = 0; j != C; j++) {
-                m[i][j] = v[i][j];
-            }
-        }
-    }
-
-    Matrix(std::array<std::array<T, C>, R> &v) {
-        for (size_t i = 0; i != R; i++) {
-            for (size_t j = 0; j != C; j++) {
-                m[i][j] = v[i][j];
-            }
-        }
-    }
-
-    Matrix(std::initializer_list<std::initializer_list<T>> v) {
-        if (R != v.size() || C != v.begin()->size()) {
-            throw std::range_error("invalid size for initializer list");
-        }
-
-        size_t i = 0;
-        typename std::initializer_list<std::initializer_list<T>>::iterator iter = v.begin();
-        while (i != R) {
-
-            size_t j = 0;
-            typename std::initializer_list<T>::iterator jter = iter->begin();
-            while (j != C) {
-                m[i][j] = *jter;
+    Matrix(std::initializer_list<std::initializer_list<T>> v): m(v.size() * v.begin()->size()) {
+        for (size_t i = 0; i != v.size(); i++) {
+            for (size_t j = 0; j != v.begin()->size(); j++) {
+                m[j + i*j] = v.begin()[i]->begin()[j];
                 
                 j++;
-                jter++;
             }
 
             i++;
-            iter++;
         }
     }
 
-    const std::array<T, C>& operator [] (const size_t i) const {
+    const std::vector<T>& operator [] (const size_t i) const {
         return m[i];
     }
 
-    std::array<T, C>& operator [] (const size_t i) {
+    std::vector<T>& operator [] (const size_t i) {
         return m[i];
     }
 
     template <typename U>
-    Matrix<T, R, C>& operator += (const Matrix<U, R, C> &rhs) {
-        for (size_t i = 0; i != R; i++) {
-            for (size_t j = 0; j != C; j++) {
-                m[i][j] += rhs[i][j];
-            }
+    Matrix<T>& operator += (const Matrix<U> &rhs) {
+        for (size_t i = 0; i != rows * cols; i++) {
+            rhs
         }
 
         return *this;
