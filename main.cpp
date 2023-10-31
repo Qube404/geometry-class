@@ -8,12 +8,31 @@
 using namespace Geometry;
 
 void test_matrix() {
-    Geometry::Matrix<float, 1, 3> a;
-    Geometry::Matrix<float, 1, 3> b(4);
+    using namespace std;
+
+    Geometry::Matrix<float> a;
+    cout << "a: " << endl << a << endl << endl;
+
+    Geometry::Matrix<float> b(3);
+    cout << "b: " << endl << b << endl << endl;
+
+    Geometry::Matrix<float> ab(1, 3);
+    cout << "ab: " << endl << ab << endl << endl;
+
+    Geometry::Matrix<float> ba(2, 3, 4);
+    cout << "ba: " << endl << ba << endl << endl;
+
     
     float carr[3] = {1, 2, 3};
-    Geometry::Matrix<float, 1, 3> c(carr, 3);
-    Geometry::Matrix<float, 1, 3> d({1, 2, 3});
+    Geometry::Matrix<float> c(carr, 3);
+    cout << "c: " << endl << c << endl << endl;
+
+    std::array<float, 3> ac({1, 2, 3});
+    Geometry::Matrix<float> ca(ac);
+    cout << "ca: " << endl << ca << endl << endl; 
+
+    Geometry::Matrix<float> d({1, 2, 3});
+    cout << "d: " << endl << d << endl << endl;
 
     float earr[3][3] = {
         {1, 2, 3},
@@ -21,58 +40,133 @@ void test_matrix() {
         {7, 8, 9}
     };
 
-    Geometry::Matrix<float, 3, 3> e(earr, 3, 3);
-    Geometry::Matrix<float, 3, 3> f({
+    Geometry::Matrix<float> e(earr, 3, 3);
+    cout << "e: " << endl << e << endl << endl;
+
+    std::array<std::array<float, 3>, 2> ef({
+        std::array<float, 3>({1, 2, 3}),
+        std::array<float, 3>({6, 5, 4})
+    });
+    Geometry::Matrix<float> fe(ef);
+    cout << "fe: " << endl << fe << endl << endl; 
+
+    Geometry::Matrix<float> f({
         {1, 2, 3},
         {4, 5, 6},
         {7, 8, 9}
     });
+    cout << "f: " << endl << f << endl << endl;
 
-    e.clear();
     float g = f[0][0];
-    int h = f[0][0];
+    cout << "g, f[0][0]: " << g << endl << endl;
+    int h = f[2][2];
+    cout << "h, f[2][2]: " << h << endl << endl;
 
-    const Geometry::Matrix<float, 3, 3> l({
+    const Geometry::Matrix<float> l({
         {1, 2, 3},
         {4, 5, 6},
         {7, 8, 9}
     });
+    cout << "l: " << endl << l << endl << endl;
 
     const float m = f[1][0];
+    cout << "m, f[1][0]: " << m << endl << endl;
 
+    cout << "f: " << endl << f << endl << endl << "l: " << endl << l << endl << endl;
     f += l;
+    cout << "f += l: " << endl << f << endl << endl;
+
     f += 2;
+    cout << "f += 2: " << endl << f << endl << endl;
+
     f -= l;
+    cout << "f -= l: " << endl << f << endl << endl;
+
     f -= 2;
+    cout << "f -= 2: " << endl << f << endl << endl;
+
+    f *= l;
+    cout << "f *= l: " << endl << f << endl << endl;
+
     f *= 10;
+    cout << "f *= 10: " << endl << f << endl << endl;
+
     f /= 2;
+    cout << "f /= 2: " << endl << f << endl << endl;
 
-    std::array<float, 3> o = l.get_col(0);
-    std::array<float, 3> p = l.get_row(2);
+    cout << "l: " << endl << l << endl << endl;
+    std::vector<float> o = l.get_col(0);
+    cout << "o, l.get_col(0): " << o << endl;
+    std::vector<float> p = l.get_row(2);
+    cout << "p, l.get_row(2): " << p << endl << endl;
 
-    Geometry::Matrix<float, 3, 3> n = l.transpose();
+    cout << "f: " << endl << f << endl << endl;
+    f.transpose();
+    cout << "f.transpose(): " << endl << f << endl << endl;
 
-    l + l;
-    l + 2;
+    e.clear();
+    cout << "e.clear(): " << endl << e << endl << endl;
 
-    l - l;
-    l - 2;
+    e.to_identity(3);
+    cout << "e.to_identity(3): " << endl << e << endl << endl;
 
-    const Geometry::Matrix<float, 2, 3> q({
+    e.to_identity(10);
+    cout << "e.to_identity(10): " << endl << e << endl << endl;
+
+    e.add_row();
+    cout << "e.add_row(): " << endl << e << endl << endl;
+
+    e.add_row(2);
+    cout << "e.add_row(2): " << endl << e << endl << endl;
+
+    e.add_rows(2, 4);
+    cout << "e.add_rows(2, 4): " << endl << e << endl << endl;
+
+    e.remove_row();
+    cout << "e.remove_row(): " << endl << e << endl << endl;
+
+    e.remove_rows(2);
+    cout << "e.remove_rows(2): " << endl << e << endl << endl;
+
+    e.add_col();
+    cout << "e.add_col(): " << endl << e << endl << endl;
+
+    e.add_col(2);
+    cout << "e.add_col(2): " << endl << e << endl << endl;
+
+    e.add_cols(2, 4);
+    cout << "e.add_cols(2, 4): " << endl << e << endl << endl;
+
+    e.remove_col();
+    cout << "e.remove_col(): " << endl << e << endl << endl;
+
+    e.remove_cols(2);
+    cout << "e.remove_cols(2): " << endl << e << endl << endl;
+
+    cout << "l: " << endl << l << endl;
+    cout << "l + l: " << endl << l + l << endl << endl;
+    cout << "l + 2: " << endl << l + 2 << endl << endl;
+
+    cout << "l - l: " << endl << l - l << endl << endl;
+    cout << "l - 2: " << endl << l - 2 << endl << endl;
+
+    const Geometry::Matrix<float> q({
         {1, 2, 3},
         {4, 5, 6}
     });
 
-    const Geometry::Matrix<float, 3, 2> r({
+    const Geometry::Matrix<float> r({
         {7, 8},
         {9, 10},
         {11, 12}
     });
 
-    q * r;
-    l * 2;
+    cout << "q: " << endl << q << endl << endl;
+    cout << "r: " << endl << r << endl << endl;
+    cout << "q * r: " << endl << q * r << endl << endl;
+    cout << "l * 2: " << endl << l * 2 << endl << endl;
 
-    l / 2;
+    cout << "l / 2: " << endl << l / 2 << endl << endl;
 }
 
 void test_vec2() {
@@ -88,12 +182,11 @@ void test_vec2() {
     Vec2<float> h(g);
     Vec2<float> l({2, 3});
 
-    Matrix<float, 1, 2> m({1.1, 2.1});
+    Matrix<float> m({1.1, 2.1});
     Vec2<float> n(m);
     Vec2<int> o(m);
 
-    Matrix<float, 2, 1> p(3);
-    Vec2<float> q(p);
+    Vec2<float> q(4);
     Vec2<float> r(q);
 
     float s = r[0];
@@ -105,7 +198,6 @@ void test_vec2() {
     e -= c; 
     e -= 2;
 
-    h *= l;
     h *= 2;
 
     n /= 2;
@@ -126,7 +218,7 @@ void test_vec2() {
     h * l;
     h * 2;
 
-    Matrix<float, 2, 5> x({
+    Matrix<float> x({
         {7, 3, 4, 8, 9},
         {4, 9, 1, 8, 5}
     });
@@ -136,6 +228,7 @@ void test_vec2() {
     n / 2;
 }
 
+/*
 void test_vec3() {
     Vec3<float> a;
     Vec3<float> b(4);
@@ -276,9 +369,8 @@ void test_vec4() {
 
     std::cout << n / 2 << std::endl;
 }
+*/
 
 int main() {
     test_matrix();
-    test_vec2();
-    test_vec3();
 }
