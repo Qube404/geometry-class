@@ -4,13 +4,10 @@
 #include <array>
 #include <vector>
 #include <initializer_list>
-#include <ostream>
 #include <stdexcept>
 #include <iostream>
 
 #include "print.h"
-
-namespace Geometry {
 
 template <typename T, typename U>
 T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
@@ -18,7 +15,7 @@ T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
         throw std::length_error("vector lhs and vector rhs should be of same size");
     }
 
-    T r;
+    T r = 0;
 
     for (size_t i = 0; i != lhs.size(); i++) {
         r += lhs[i] * rhs[i];
@@ -438,9 +435,14 @@ public:
     Vec2(std::initializer_list<U> v): x(v.begin()[0]), y(v.begin()[1]) {}
 
     template <typename U>
-    Vec2(Matrix<U> &v): x(v[0][0]), y(v[0][1]) {
-        bool valid_size = (v.rows == 1 && v.cols == 2) || (v.rows == 2 && v.cols == 1);
-        if (!valid_size) {
+    Vec2(Matrix<U> &v) {
+        if (v.rows == 1 && v.cols == 2) {
+            x = v[0][0];
+            y = v[0][1];
+        } else if (v.rows == 2 && v.cols == 1) {
+            x = v[0][0];
+            y = v[1][0];
+        } else {
             throw std::length_error("matrix size should be 1x2 or 2x1");
         }
     }
@@ -448,7 +450,7 @@ public:
     template<typename U>
     Vec2(Vec2<U> &v): x(v.x), y(v.y) {}
 
-    T& operator [] (const unsigned int i) {
+    T& operator [] (const size_t i) {
         switch (i) {
             case 0:
                 return x;
@@ -459,7 +461,7 @@ public:
         throw std::range_error("index out of bounds");
     }
 
-    const T& operator [] (const unsigned int i) const {
+    const T& operator [] (const size_t i) const {
         switch (i) {
         case 0:
             return x;
@@ -522,10 +524,12 @@ public:
     }
 
     Matrix<T> to_matrix_col() {
-        return Matrix<T>({
-            {x},
-            {y}
-        });
+        Matrix<T> r(2, 1);
+
+        r[0][0] = x;
+        r[1][0] = y;
+
+        return r;
     }
 
     void clear() {
@@ -578,7 +582,7 @@ Matrix<T> operator * (Vec2<T> &lhs, Matrix<U> &rhs) {
 
     Matrix<T> r(1, rhs.cols);
 
-    std::array<T, 2> row({lhs.x, lhs.y});
+    std::vector<T> row({lhs.x, lhs.y});
     for (size_t i = 0; i != rhs.cols; i++) {
         std::vector<U> col({rhs[0][i], rhs[1][i]});
 
@@ -847,5 +851,220 @@ std::ostream& operator << (std::ostream &os, const Vec3<T> &v) {
     return os;
 }*/
 
+// Vec3
+template <typename T>
+class Vec3: public Vec2<T> {
+public:
+    T z;
+
+    Vec3(): z(0) {}
+
+    Vec3(T n): Vec2<T>(n), z(n) {}
+
+    Vec3(T x, T y, T z): Vec2<T>(x, y), z(z) {}
+
+    template <typename U>
+    Vec3(U* v): Vec2<T>(v), z(v[2]) {}
+
+    template <typename U>
+    Vec3(std::array<U, 3> &v): Vec2<T>(v[0], v[1]), z(v[2]) {}
+
+    template <typename U>
+    Vec3(std::initializer_list<U> v): Vec2<T>(v), z(v.begin()[2]) {}
+
+    template <typename U>
+    Vec3(Matrix<U> &v) {
+        Vec2<T>::x = v[0][0];
+        if (v.rows == 1 && v.cols == 3) {
+            Vec2<T>::y = v[0][1];
+            z = v[0][2];
+        } else if (v.rows == 3 && v.cols == 1) {
+            Vec2<T>::y = v[1][0];
+            z = v[2][0];
+        } else {
+            throw std::length_error("matrix size should be 1x3 or 3x1");
+        }
+    }
+
+    template<typename U>
+    Vec3(Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
+
+    T& operator [] (const size_t i) {
+        switch (i) {
+            case 0:
+                return Vec2<T>::x;
+            case 1:
+                return Vec2<T>::y;
+            case 2:
+                return z;
+        }
+
+        throw std::range_error("index out of bounds");
+    }
+
+    const T& operator [] (const size_t i) const {
+        switch (i) {
+            case 0:
+                return Vec2<T>::x;
+            case 1:
+                return Vec2<T>::y;
+            case 2:
+                return z;
+        }
+
+        throw std::range_error("index out of bounds");
+    }
+
+    template <typename U>
+    Vec3<T>& operator += (const Vec3<U>& rhs) {
+        Vec2<T>::x += rhs.x;
+        Vec2<T>::y += rhs.y;
+        z += rhs.z;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator += (const U rhs) {
+        Vec2<T>::operator+=(rhs);
+        z += rhs;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator -= (const Vec3<U>& rhs) {
+        Vec2<T>::x -= rhs.x;
+        Vec2<T>::y -= rhs.y;
+        z -= rhs.z;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator -= (const U rhs) {
+        Vec2<T>::operator-=(rhs);
+        z -= rhs;
+
+        return *this;
+    }
+
+    Vec3<T>& operator *= (const T rhs) {
+        Vec2<T>::operator*=(rhs);
+        z *= rhs;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator /= (const U rhs) {
+        Vec2<T>::operator/=(rhs);
+        z /= rhs;
+
+        return *this;
+    }
+
+    Matrix<T> to_matrix_row() {
+        return Matrix<T>({Vec2<T>::x, Vec2<T>::y, z});
+    }
+
+    Matrix<T> to_matrix_col() {
+        Matrix<T> r(3, 1);
+
+        r[0][0] = Vec2<T>::x;
+        r[1][0] = Vec2<T>::y;
+        r[2][0] = z;
+
+        return r;
+    }
+
+    void clear() {
+        Vec2<T>::clear();
+        z = 0;
+    }
+};
+
+template <typename T, typename U>
+Vec3<T> operator + (Vec3<T> &lhs, Vec3<U> &rhs) {
+    Vec3<T> r(lhs);
+
+    r += rhs;
+
+    return r;
 }
+
+template <typename T, typename U>
+Vec3<T> operator + (Vec3<T> &lhs, const U rhs) {
+    Vec3<T> r(lhs);
+
+    r += rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec3<T> operator - (Vec3<T> &lhs, Vec3<U> &rhs) {
+    Vec3<T> r(lhs);
+
+    r -= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec3<T> operator - (Vec3<T> &lhs, const U rhs) {
+    Vec3<T> r(lhs);
+
+    r -= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Matrix<T> operator * (Vec3<T> &lhs, Matrix<U> &rhs) {
+    if (rhs.rows != 3) {
+        throw std::length_error("rhs.rows should be equal to 3");
+    }
+
+    Matrix<T> r(1, rhs.cols);
+
+    std::vector<T> row({lhs.x, lhs.y, lhs.z});
+    for (size_t i = 0; i != rhs.cols; i++) {
+        std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i]});
+
+        r[0][i] = dot(row, col);
+    }
+
+    return r;
+}
+
+template <typename T, typename U>
+T operator * (Vec3<T> &lhs, Vec3<U> &rhs) {
+    return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
+}
+
+template <typename T, typename U>
+Vec3<T> operator * (Vec3<T> &lhs, const U rhs) {
+    Vec3<T> r(lhs);
+
+    r *= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec3<T> operator / (Vec3<T> &lhs, const U rhs) {
+    Vec3<T> r(lhs);
+
+    r /= rhs;
+
+    return r;
+}
+
+template <typename T> std::ostream& operator << (std::ostream &os, const Vec3<T> &v) {
+    os << "[" << v.x << " " << v.y << " " << v.z << "]";
+
+    return os;
+}
+
 #endif
