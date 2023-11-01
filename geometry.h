@@ -83,6 +83,10 @@ public:
         }
     }
 
+    Matrix(Vec2<T> &v);
+    Matrix(Vec3<T> &v);
+    Matrix(Vec4<T> &v);
+
     Matrix(std::initializer_list<std::initializer_list<T>> v): 
         m(v.size(), std::vector<T>(v.begin()->size())), 
         rows(v.size()), 
@@ -1291,5 +1295,14 @@ template <typename T> std::ostream& operator << (std::ostream &os, const Vec4<T>
 
     return os;
 }
+
+template <typename T>
+Matrix<T>::Matrix(Vec2<T> &v): m({v.x, v.y}), rows(1), cols(2) {}
+
+template <typename T>
+Matrix<T>::Matrix(Vec3<T> &v): m({v.x, v.y, v.z}), rows(1), cols(3) {}
+
+template <typename T>
+Matrix<T>::Matrix(Vec4<T> &v): m({v.x, v.y, v.z, v.w}), rows(1), cols(4) {}
 
 #endif
