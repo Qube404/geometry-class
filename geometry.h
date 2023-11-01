@@ -1067,4 +1067,229 @@ template <typename T> std::ostream& operator << (std::ostream &os, const Vec3<T>
     return os;
 }
 
+// Vec4
+template <typename T>
+class Vec4: public Vec3<T> {
+public:
+    T w;
+
+    Vec4(): w(0) {}
+
+    Vec4(T n): Vec3<T>(n), w(n) {}
+
+    Vec4(T x, T y, T z, T w): Vec3<T>(x, y, z), w(w) {}
+
+    template <typename U>
+    Vec4(U* v): Vec3<T>(v), w(v[3]) {}
+
+    template <typename U>
+    Vec4(std::array<U, 4> &v): Vec3<T>(v[0], v[1], v[2]), w(v[3]) {}
+
+    template <typename U>
+    Vec4(std::initializer_list<U> v): Vec3<T>(v), w(v.begin()[3]) {}
+
+    template <typename U>
+    Vec4(Matrix<U> &v) {
+        Vec2<T>::x = v[0][0];
+        if (v.rows == 1 && v.cols == 4) {
+            Vec2<T>::y = v[0][1];
+            Vec3<T>::z = v[0][2];
+            w = v[0][3];
+        } else if (v.rows == 4 && v.cols == 1) {
+            Vec2<T>::y = v[1][0];
+            Vec3<T>::z = v[2][0];
+            w = v[3][0];
+        } else {
+            throw std::length_error("matrix size should be 1x4 or 4x1");
+        }
+    }
+
+    template<typename U>
+    Vec4(Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
+
+    T& operator [] (const size_t i) {
+        switch (i) {
+            case 0:
+                return Vec2<T>::x;
+            case 1:
+                return Vec2<T>::y;
+            case 2:
+                return Vec3<T>::z;
+            case 3:
+                return w;
+        }
+
+        throw std::range_error("index out of bounds");
+    }
+
+    const T& operator [] (const size_t i) const {
+        switch (i) {
+            case 0:
+                return Vec2<T>::x;
+            case 1:
+                return Vec2<T>::y;
+            case 2:
+                return Vec3<T>::z;
+            case 3:
+                return w;
+        }
+
+        throw std::range_error("index out of bounds");
+    }
+
+    template <typename U>
+    Vec4<T>& operator += (const Vec4<U>& rhs) {
+        Vec2<T>::x += rhs.x;
+        Vec2<T>::y += rhs.y;
+        Vec3<T>::z += rhs.z;
+        w += rhs.w;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec4<T>& operator += (const U rhs) {
+        Vec3<T>::operator+=(rhs);
+        w += rhs;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec4<T>& operator -= (const Vec4<U>& rhs) {
+        Vec2<T>::x -= rhs.x;
+        Vec2<T>::y -= rhs.y;
+        Vec3<T>::z -= rhs.z;
+        w -= rhs.w;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec4<T>& operator -= (const U rhs) {
+        Vec3<T>::operator-=(rhs);
+        w -= rhs;
+
+        return *this;
+    }
+
+    Vec4<T>& operator *= (const T rhs) {
+        Vec3<T>::operator*=(rhs);
+        w *= rhs;
+
+        return *this;
+    }
+
+    template <typename U>
+    Vec4<T>& operator /= (const U rhs) {
+        Vec3<T>::operator/=(rhs);
+        w /= rhs;
+
+        return *this;
+    }
+
+    Matrix<T> to_matrix_row() {
+        return Matrix<T>({Vec2<T>::x, Vec2<T>::y, Vec3<T>::z, w});
+    }
+
+    Matrix<T> to_matrix_col() {
+        Matrix<T> r(4, 1);
+
+        r[0][0] = Vec2<T>::x;
+        r[1][0] = Vec2<T>::y;
+        r[2][0] = Vec3<T>::z;
+        r[3][0] = w;
+
+        return r;
+    }
+
+    void clear() {
+        Vec3<T>::clear();
+        w = 0;
+    }
+};
+
+template <typename T, typename U>
+Vec4<T> operator + (Vec4<T> &lhs, Vec4<U> &rhs) {
+    Vec4<T> r(lhs);
+
+    r += rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec4<T> operator + (Vec4<T> &lhs, const U rhs) {
+    Vec4<T> r(lhs);
+
+    r += rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec4<T> operator - (Vec4<T> &lhs, Vec4<U> &rhs) {
+    Vec4<T> r(lhs);
+
+    r -= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec4<T> operator - (Vec4<T> &lhs, const U rhs) {
+    Vec4<T> r(lhs);
+
+    r -= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Matrix<T> operator * (Vec4<T> &lhs, Matrix<U> &rhs) {
+    if (rhs.rows != 4) {
+        throw std::length_error("rhs.rows should be equal to 4");
+    }
+
+    Matrix<T> r(1, rhs.cols);
+
+    std::vector<T> row({lhs.x, lhs.y, lhs.z, lhs.w});
+    for (size_t i = 0; i != rhs.cols; i++) {
+        std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i], rhs[3][i]});
+
+        r[0][i] = dot(row, col);
+    }
+
+    return r;
+}
+
+template <typename T, typename U>
+T operator * (Vec4<T> &lhs, Vec4<U> &rhs) {
+    return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
+}
+
+template <typename T, typename U>
+Vec4<T> operator * (Vec4<T> &lhs, const U rhs) {
+    Vec4<T> r(lhs);
+
+    r *= rhs;
+
+    return r;
+}
+
+template <typename T, typename U>
+Vec4<T> operator / (Vec4<T> &lhs, const U rhs) {
+    Vec4<T> r(lhs);
+
+    r /= rhs;
+
+    return r;
+}
+
+template <typename T> std::ostream& operator << (std::ostream &os, const Vec4<T> &v) {
+    os << "[" << v.x << " " << v.y << " " << v.z << " " << v.w << "]";
+
+    return os;
+}
+
 #endif

@@ -350,6 +350,7 @@ void test_vec3() {
 
     e.x = 4;
     e.y = 7;
+    e.z = 4;
     cout << "e: " << e << endl << endl;
     e.clear();
     cout << "e.clear(): " << e << endl << endl;
@@ -378,90 +379,124 @@ void test_vec3() {
     cout << "n: " << endl << n << endl;
     cout << "n / 2: " << n / 2 << endl << endl;
 }
-/*
+
 void test_vec4() {
-    Vec3<float> a;
-    std::cout << a << std::endl;
-    Vec3<float> b(4);
-    std::cout << b << std::endl;
-    Vec3<float> c(5, 6, 7);
-    std::cout << c << std::endl;
+    using namespace std;
 
-    float d[3] = {7, 8, 9};
-    Vec3<float> e(d);
-    std::cout << e << std::endl;
-    Vec3<int> f(d);
-    std::cout << f << std::endl;
+    Vec4<float> a;
+    cout << "a: " << a << endl << endl;
 
-    std::array<float, 3> g = {9, 1, 2};
-    Vec3<float> h(g);
-    std::cout << h << std::endl;
-    Vec3<float> l({2, 3, 4});
-    std::cout << l << std::endl;
+    Vec4<float> b(4);
+    cout << "b: " << b << endl << endl;
 
-    Matrix<float, 1, 3> m({1, 2, 3});
-    Vec3<float> n(m);
-    std::cout << n << std::endl;
-    Vec3<int> o(m);
-    std::cout << o << std::endl;
+    Vec4<float> c(5, 6, 7, 8);
+    cout << "c: " << c << endl << endl;
 
-    Matrix<float, 3, 1> p(3);
-    Vec3<float> q(p);
-    std::cout << q << std::endl;
-    Vec3<float> r(q);
-    std::cout << r << std::endl;
+    float d[4] = {7, 8, 9, 1};
+    Vec4<float> e(d);
+    cout << "e: " << e << endl << endl;
+
+    Vec4<int> f(d);
+    cout << "f: " << f << endl << endl;
+
+    std::array<float, 4> g = {9, 1, 2, 3};
+    cout << "g: " << g << endl << endl;
+
+    Vec4<float> h(g);
+    cout << "h: " << h << endl << endl;
+
+    Vec4<float> l({2, 3, 4, 5});
+    cout << "l: " << l << endl << endl;
+
+    Matrix<float> m({1.1, 2.1, 3.2, 4.4});
+    cout << "m: " << m << endl << endl;
+
+    Vec4<float> n(m);
+    cout << "n: " << n << endl << endl;
+
+    Vec4<int> o(m);
+    cout << "o: " << o << endl << endl;
+
+    Vec4<float> q(4);
+    cout << "q: " << q << endl << endl;
+
+    Vec4<float> r(q);
+    cout << "r: " << r << endl << endl;
 
     float s = r[0];
-    std::cout << s << std::endl;
-    const int t = r[1];
-    std::cout << t << std::endl;
-    const float z = r[2];
-    std::cout << z << std::endl;
+    cout << "s, r[0]: " << s << endl << endl;
 
-    std::cout << b << " " << c << std::endl;
-    b += c; 
-    std::cout << b << std::endl;
+    const float t = r[1];
+    cout << "t, r[1]: " << t << endl << endl;
+
+    s = r[2];
+    cout << "t, r[2]: " << t << endl << endl;
+
+    s = r[3];
+    cout << "t, r[3]: " << t << endl << endl;
+
+    cout << "b: " << b << endl << "c: " << c << endl << endl;
+    b += c;
+    cout << "b += c: " << b << endl << endl;
+
     b += 2;
-    std::cout << b << std::endl;
+    cout << "b += 2: " << b << endl << endl;
 
-    std::cout << e << " " << c << std::endl;
+    cout << "e: " << e << endl << "c: " << c << endl << endl;
     e -= c; 
-    std::cout << e << std::endl;
+    cout << "e -= c: " << e << endl << endl;
+
     e -= 2;
-    std::cout << e << std::endl;
+    cout << "e -= 2: " << e << endl << endl;
 
-    std::cout << h << " " << l << std::endl;
-    h *= l;
-    std::cout << h << std::endl;
+    cout << "h: " << h << endl << endl;
     h *= 2;
-    std::cout << h << std::endl;
+    cout << "h *= 2: " << h << endl << endl;
 
-    std::cout << n << std::endl;
+    cout << "n: " << n << endl << endl;
     n /= 2;
-    std::cout << n << std::endl;
+    cout << "n /= 2: " << n << endl << endl;
 
-    std::cout << b.to_matrix_row() << std::endl;
-    std::cout << b.to_matrix_col() << std::endl;
+    cout << "b.to_matrix_row(): " << b.to_matrix_row() << endl;
+    cout << "b.to_matrix_col(): " << endl << b.to_matrix_col() << endl << endl;
 
-    std::cout << b << std::endl;
-    b.clear();
-    std::cout << b << std::endl;
+    e.x = 4;
+    e.y = 7;
+    e.z = 8;
+    e.w = 2;
+    cout << "e: " << e << endl << endl;
+    e.clear();
+    cout << "e.clear(): " << e << endl << endl;
 
-    std::cout << b + c << std::endl;
-    std::cout << b + 2 << std::endl;
+    cout << "b: " << b << endl << "c: " << c << endl << endl;
+    cout << "b + c: " << b + c << endl << endl; 
+    cout << "b + 2: " << b + 2 << endl << endl;
 
-    std::cout << e - c << std::endl; 
-    std::cout << e - 2 << std::endl;
+    cout << "e: " << e << endl << "c: " << c << endl << endl;
+    cout << "e - c: " << e - c << endl << endl; 
+    cout << "e - 2: " << e - 2 << endl << endl;
 
-    std::cout << h * l << std::endl;
-    std::cout << h * 2 << std::endl;
+    cout << "h: " << h << endl << "l: " << l << endl << endl;
+    cout << "h * l: " << h * l << endl << endl;
+    cout << "h * 2: " << h * 2 << endl << endl;
 
-    std::cout << n / 2 << std::endl;
+    Matrix<float> x({
+        {7, 3},
+        {4, 9},
+        {2, 3},
+        {8, 5}
+    });
+    Vec4<int> u(3, 7, 8, 5);
+    cout << "x: " << endl << x << endl << endl << "u: " << u << endl << endl;
+    cout << "u * x: " << u * x << endl << endl;
+
+    cout << "n: " << endl << n << endl;
+    cout << "n / 2: " << n / 2 << endl << endl;
 }
-*/
 
 int main() {
     //test_matrix();
     //test_vec2();
-    test_vec3();
+    //test_vec3();
+    test_vec4();
 }
