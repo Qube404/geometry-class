@@ -495,8 +495,4 @@ void test_vec4() {
 }
 
 int main() {
-    //test_matrix();
-    //test_vec2();
-    //test_vec3();
-    test_vec4();
 }
