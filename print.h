@@ -42,7 +42,7 @@ std::ostream& operator << (std::ostream &os, const std::vector<std::vector<T>> &
 }
 
 template <typename T>
-void prt_wnl(T o) {
+void println(T o) {
     std::cout << o << std::endl;
 }
 

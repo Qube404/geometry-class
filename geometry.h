@@ -6,8 +6,11 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <iostream>
+#include <bitset>
 
 #include "print.h"
+
+using namespace std;
 
 template <typename T, typename U>
 T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
@@ -18,9 +21,8 @@ T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
     T r = 0;
 
     for (size_t i = 0; i != lhs.size(); i++) {
-        r = r + lhs[i] * rhs[i];
+        r += lhs[i] * rhs[i];
     }
-    std::cout << r << std::endl;
 
     return r;
 }
@@ -159,12 +161,12 @@ public:
         }
 
         size_t rhs_cols = rhs.m.begin()->size();
-        std::vector<std::vector<T>> r(rows, std::vector<T>(rhs_cols));
+        std::vector<std::vector<T>> r(rows, std::vector<T>(rhs_cols, 0));
 
         for (size_t i = 0; i != rows; i++) {
             for (size_t j = 0; j != rhs_cols; j++) {
                 std::vector<T> row(cols, 0);
-                std::vector<T> col(cols, 0);
+                std::vector<U> col(cols, 0);
 
                 for (size_t k = 0; k != cols; k++) {
                     row[k] = m[i][k];
@@ -178,7 +180,7 @@ public:
             }
         }
 
-        m = r;
+        m = std::move(r);
         cols = rhs_cols;
         return *this;
     }
@@ -254,7 +256,7 @@ public:
             r[i][i] = 1;
         }
 
-        std::cout << "created" << std::endl << m << std::endl << r << std::endl << std::endl;
+        //std::cout << "created" << std::endl << m << std::endl << r << std::endl << std::endl;
 
         // Swaps rows in a way that makes each pivot value non-zero
         for (size_t i = 0; i != cols; i++) {
@@ -280,7 +282,7 @@ public:
             }
         }
 
-        std::cout << "swapped" << std::endl << m << std::endl << r << std::endl << std::endl;
+        //std::cout << "swapped" << std::endl << m << std::endl << r << std::endl << std::endl;
         
         // Sets every value below the diagonal to zero
         for (size_t i = 0; i != cols - 1; i++) {
@@ -295,11 +297,11 @@ public:
                 }
 
                 // Set to zero to account for floating point error
-                //m[j][i] = 0;
+                m[j][i] = 0;
             }
         }
 
-        std::cout << "low zero" << std::endl << m << std::endl << r << std::endl << std::endl;
+        //std::cout << "low zero" << std::endl << m << std::endl << r << std::endl << std::endl;
 
         // Set every pivot value to one
         for (size_t i = 0; i != rows; i++) {
@@ -309,9 +311,11 @@ public:
                 m[i][j] /= val;
                 r[i][j] /= val;
             }
+
+            m[i][i] = 1;
         }
 
-        std::cout << "pivots one" << std::endl << m << std::endl << r << std::endl << std::endl;
+        //std::cout << "pivots one" << std::endl << m << std::endl << r << std::endl << std::endl;
 
         // Set every value above the diagonal to zero
         for (size_t i = 0; i != rows; i++) {
@@ -327,7 +331,7 @@ public:
             }
         }
 
-        std::cout << "high zero" << std::endl << m << std::endl << r << std::endl << std::endl;
+        //std::cout << "high zero" << std::endl << m << std::endl << r << std::endl << std::endl;
 
         m = std::move(r);
         return *this;

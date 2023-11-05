@@ -1,11 +1,14 @@
+#include <iomanip>
 #include <iostream>
 #include <initializer_list>
 #include <vector>
+#include <numbers>
+#include <limits>
 
 #include "geometry.h"
 #include "print.h"
 
-void test_matrix() {
+/*void test_matrix() {
     using namespace std;
 
     Matrix<float> a;
@@ -491,7 +494,7 @@ void test_vec4() {
 
     cout << "n: " << endl << n << endl;
     cout << "n / 2: " << n / 2 << endl << endl;
-}
+}*/
 
 int main() {
     using namespace std;
@@ -502,6 +505,4 @@ int main() {
     });
     Matrix<float> n(m);
     m.invert();
-
-    n * m;
 }
