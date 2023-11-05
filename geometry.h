@@ -18,8 +18,9 @@ T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
     T r = 0;
 
     for (size_t i = 0; i != lhs.size(); i++) {
-        r += lhs[i] * rhs[i];
+        r = r + lhs[i] * rhs[i];
     }
+    std::cout << r << std::endl;
 
     return r;
 }

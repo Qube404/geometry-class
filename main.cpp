@@ -497,11 +497,11 @@ int main() {
     using namespace std;
 
     Matrix<float> m({
-        {4, 7},
-        {2, 6},
+        {3, 2},
+        {-2, -1},
     });
     Matrix<float> n(m);
     m.invert();
 
-    std::cout << n * m << std::endl;
+    n * m;
 }
