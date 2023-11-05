@@ -20,7 +20,6 @@ void test_matrix() {
     Matrix<float> ba(2, 3, 4);
     cout << "ba: " << endl << ba << endl << endl;
 
-    
     float carr[3] = {1, 2, 3};
     Matrix<float> c(carr, 3);
     cout << "c: " << endl << c << endl << endl;
@@ -495,4 +494,14 @@ void test_vec4() {
 }
 
 int main() {
+    using namespace std;
+
+    Matrix<float> m({
+        {4, 7},
+        {2, 6},
+    });
+    Matrix<float> n(m);
+    m.invert();
+
+    std::cout << n * m << std::endl;
 }

@@ -242,33 +242,93 @@ public:
     }
 
     Matrix& invert() {
+        // Checks for square matrix
         if (rows != cols) {
             throw std::length_error("rows must be equal to cols for inversion");
         }
 
-        // Identity Matrix
-        std::vector<std::vector<T>> inv(m);
+        // Creates identity matrix to be converted to inverted matrix
+        std::vector<std::vector<T>> r(rows, std::vector<T>(cols, 0));
+        for (size_t i = 0; i != rows; i++) {
+            r[i][i] = 1;
+        }
 
-        // Loop over every column
+        std::cout << "created" << std::endl << m << std::endl << r << std::endl << std::endl;
+
+        // Swaps rows in a way that makes each pivot value non-zero
         for (size_t i = 0; i != cols; i++) {
-            if (inv[i][i] == 0) {
+            if (m[i][i] == 0) {
+                // Row refers to the row with the biggest value in the current column
                 size_t row = i;
-
                 for (size_t j = 0; j != rows; j++) {
-                    if (inv[j][i] > inv[row][i]) {
+                    if (m[j][i] > m[row][i]) {
                         row = j;
                     }
                 }
 
+                // If not enough non zero values exist the matrix is singular
+                //
+                // If row is still equal to i it must be a singular matrix as being within
+                // this code block implies the value at this row and column is zero.
                 if (row == i) {
                     throw std::logic_error("one or more matrix columns has all 0 values");
                 } else {
-                    std::swap(inv[i], inv[row]);
+                    std::swap(m[i], m[row]);
+                    std::swap(r[i], r[row]);
                 }
             }
         }
 
-        m = std::move(inv);
+        std::cout << "swapped" << std::endl << m << std::endl << r << std::endl << std::endl;
+        
+        // Sets every value below the diagonal to zero
+        for (size_t i = 0; i != cols - 1; i++) {
+            for (size_t j = i + 1; j != rows; j++) {
+                // Constant to multiply the row element to be added to the current 
+                // element by
+                const T val = m[j][i] / m[i][i];
+
+                for (size_t k = 0; k != cols; k++) {
+                    m[j][k] -= val * m[i][k]; 
+                    r[j][k] -= val * r[i][k];
+                }
+
+                // Set to zero to account for floating point error
+                //m[j][i] = 0;
+            }
+        }
+
+        std::cout << "low zero" << std::endl << m << std::endl << r << std::endl << std::endl;
+
+        // Set every pivot value to one
+        for (size_t i = 0; i != rows; i++) {
+            const T val = m[i][i];
+
+            for (size_t j = 0; j != cols; j++) {
+                m[i][j] /= val;
+                r[i][j] /= val;
+            }
+        }
+
+        std::cout << "pivots one" << std::endl << m << std::endl << r << std::endl << std::endl;
+
+        // Set every value above the diagonal to zero
+        for (size_t i = 0; i != rows; i++) {
+            for (size_t j = i + 1; j != cols; j++) {
+                const T val = m[i][j];
+
+                for (size_t k = 0; k != cols; k++) {
+                    m[i][k] -= val * m[j][k];  
+                    r[i][k] -= val * r[j][k];
+                }
+
+                m[i][j] = 0;
+            }
+        }
+
+        std::cout << "high zero" << std::endl << m << std::endl << r << std::endl << std::endl;
+
+        m = std::move(r);
         return *this;
     }
 
