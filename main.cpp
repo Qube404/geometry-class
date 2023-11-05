@@ -1,14 +1,11 @@
-#include <iomanip>
 #include <iostream>
 #include <initializer_list>
 #include <vector>
-#include <numbers>
-#include <limits>
 
 #include "geometry.h"
 #include "print.h"
 
-/*void test_matrix() {
+void test_matrix() {
     using namespace std;
 
     Matrix<float> a;
@@ -103,6 +100,17 @@
     cout << "f: " << endl << f << endl << endl;
     f.transpose();
     cout << "f.transpose(): " << endl << f << endl << endl;
+
+    Matrix<float> de({
+        {3, 2},
+        {-2, -1},
+    });
+    Matrix<float> ed(m);
+    de.invert();
+
+    cout << "de: " << endl << de << endl << endl;
+    cout << "ed: " << endl << ed << endl << endl;
+    cout << "de * ed: " << endl << de * ed << endl;
 
     e.clear();
     cout << "e.clear(): " << endl << e << endl << endl;
@@ -494,15 +502,7 @@ void test_vec4() {
 
     cout << "n: " << endl << n << endl;
     cout << "n / 2: " << n / 2 << endl << endl;
-}*/
+}
 
 int main() {
-    using namespace std;
-
-    Matrix<float> m({
-        {3, 2},
-        {-2, -1},
-    });
-    Matrix<float> n(m);
-    m.invert();
 }
