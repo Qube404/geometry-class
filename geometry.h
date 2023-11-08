@@ -1146,4 +1146,13 @@ Matrix<T>::Matrix(Vec3<T> &v): m({v.x, v.y, v.z}), rows(1), cols(3) {}
 template <typename T>
 Matrix<T>::Matrix(Vec4<T> &v): m({v.x, v.y, v.z, v.w}), rows(1), cols(4) {}
 
+typedef Vec2<int> Vec2i;
+typedef Vec2<float> Vec2f;
+
+typedef Vec3<int> Vec3i;
+typedef Vec3<float> Vec3f;
+
+typedef Vec4<int> Vec4i;
+typedef Vec4<float> Vec4f;
+
 #endif
