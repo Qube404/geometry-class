@@ -521,7 +521,7 @@ public:
         }
     }
 
-    template<typename U>
+    template <typename U>
     Vec2(Vec2<U> &v): x(v.x), y(v.y) {}
 
     T& operator [] (const size_t i) {
@@ -576,6 +576,24 @@ public:
         y -= rhs;
 
         return *this;
+    }
+
+    template <typename U>
+    Vec2<T>& operator *= (const Matrix<U> &rhs) {
+        if (rhs.rows != 2 && rhs.cols != 2) {
+            throw std::length_error("matrix size should be 2x2");
+        }
+
+        Vec2<T> r(1, 2);
+
+        std::vector<T> row({x, y});
+        for (size_t i = 0; i != 2; i++) {
+            std::vector<U> col({rhs[0][i], rhs[1][i]});
+
+            r[0][i] = dot(row, col);
+        }
+
+        return r;
     }
 
     Vec2<T>& operator *= (const T rhs) {
@@ -719,11 +737,12 @@ public:
 
     template <typename U>
     Vec3(Matrix<U> &v) {
-        Vec2<T>::x = v[0][0];
         if (v.rows == 1 && v.cols == 3) {
+            Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[0][1];
             z = v[0][2];
         } else if (v.rows == 3 && v.cols == 1) {
+            Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[1][0];
             z = v[2][0];
         } else {
@@ -731,7 +750,7 @@ public:
         }
     }
 
-    template<typename U>
+    template <typename U>
     Vec3(Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
 
     T& operator [] (const size_t i) {
@@ -792,6 +811,24 @@ public:
         z -= rhs;
 
         return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator *= (const Matrix<U> &rhs) {
+        if (rhs.rows != 3 && rhs.cols != 3) {
+            throw std::length_error("matrix size should be 3x3");
+        }
+
+        Vec3<T> r(1, 3);
+
+        std::vector<T> row({Vec2<T>::x, Vec2<T>::y, z});
+        for (size_t i = 0; i != 3; i++) {
+            std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i]});
+
+            r[0][i] = dot(row, col);
+        }
+
+        return r;
     }
 
     Vec3<T>& operator *= (const T rhs) {
@@ -935,12 +972,13 @@ public:
 
     template <typename U>
     Vec4(Matrix<U> &v) {
-        Vec2<T>::x = v[0][0];
         if (v.rows == 1 && v.cols == 4) {
+            Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[0][1];
             Vec3<T>::z = v[0][2];
             w = v[0][3];
         } else if (v.rows == 4 && v.cols == 1) {
+            Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[1][0];
             Vec3<T>::z = v[2][0];
             w = v[3][0];
@@ -949,7 +987,7 @@ public:
         }
     }
 
-    template<typename U>
+    template <typename U>
     Vec4(Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
 
     T& operator [] (const size_t i) {
@@ -1016,6 +1054,24 @@ public:
         w -= rhs;
 
         return *this;
+    }
+
+    template <typename U>
+    Vec3<T>& operator *= (const Matrix<U> &rhs) {
+        if (rhs.rows != 4 && rhs.cols != 4) {
+            throw std::length_error("matrix size should be 4x4");
+        }
+
+        Vec4<T> r(1, 4);
+
+        std::vector<T> row({Vec2<T>::x, Vec2<T>::y, Vec3<T>::z, w});
+        for (size_t i = 0; i != 4; i++) {
+            std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i], rhs[3][i]});
+
+            r[0][i] = dot(row, col);
+        }
+
+        return r;
     }
 
     Vec4<T>& operator *= (const T rhs) {
