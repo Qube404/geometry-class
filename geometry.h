@@ -495,21 +495,21 @@ public:
 
     Vec2(): x(0), y(0) {}
 
-    Vec2(T n): x(n), y(n) {}
+    Vec2(const T n): x(n), y(n) {}
 
-    Vec2(T x, T y): x(x), y(y) {}
-
-    template <typename U>
-    Vec2(U* v): x(v[0]), y(v[1]) {}
+    Vec2(const T x, const T y): x(x), y(y) {}
 
     template <typename U>
-    Vec2(std::array<U, 2> &v): x(v[0]), y(v[1]) {}
+    Vec2(const U* v): x(v[0]), y(v[1]) {}
 
     template <typename U>
-    Vec2(std::initializer_list<U> v): x(v.begin()[0]), y(v.begin()[1]) {}
+    Vec2(const std::array<U, 2> &v): x(v[0]), y(v[1]) {}
 
     template <typename U>
-    Vec2(Matrix<U> &v) {
+    Vec2(const std::initializer_list<U> v): x(v.begin()[0]), y(v.begin()[1]) {}
+
+    template <typename U>
+    Vec2(const Matrix<U> &v) {
         if (v.rows == 1 && v.cols == 2) {
             x = v[0][0];
             y = v[0][1];
@@ -522,10 +522,10 @@ public:
     }
 
     template <typename U>
-    Vec2(Vec2<U> &v): x(v.x), y(v.y) {}
+    Vec2(const Vec2<U> &v): x(v.x), y(v.y) {}
 
     template <typename U>
-    Vec2& operator = (Matrix<U> &rhs) {
+    Vec2& operator = (const Matrix<U> &rhs) {
         if (rhs.rows == 1 && rhs.cols == 2) {
             x = rhs[0][0];
             y = rhs[0][1];
@@ -737,21 +737,21 @@ public:
 
     Vec3(): z(0) {}
 
-    Vec3(T n): Vec2<T>(n), z(n) {}
+    Vec3(const T n): Vec2<T>(n), z(n) {}
 
-    Vec3(T x, T y, T z): Vec2<T>(x, y), z(z) {}
-
-    template <typename U>
-    Vec3(U* v): Vec2<T>(v), z(v[2]) {}
+    Vec3(const T x, const T y, const T z): Vec2<T>(x, y), z(z) {}
 
     template <typename U>
-    Vec3(std::array<U, 3> &v): Vec2<T>(v[0], v[1]), z(v[2]) {}
+    Vec3(const U* v): Vec2<T>(v), z(v[2]) {}
 
     template <typename U>
-    Vec3(std::initializer_list<U> v): Vec2<T>(v), z(v.begin()[2]) {}
+    Vec3(const std::array<U, 3> &v): Vec2<T>(v[0], v[1]), z(v[2]) {}
 
     template <typename U>
-    Vec3(Matrix<U> &v) {
+    Vec3(const std::initializer_list<U> v): Vec2<T>(v), z(v.begin()[2]) {}
+
+    template <typename U>
+    Vec3(const Matrix<U> &v) {
         if (v.rows == 1 && v.cols == 3) {
             Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[0][1];
@@ -766,10 +766,10 @@ public:
     }
 
     template <typename U>
-    Vec3(Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
+    Vec3(const Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
 
     template <typename U>
-    Vec3& operator = (Matrix<U> &rhs) {
+    Vec3& operator = (const Matrix<U> &rhs) {
         if (rhs.rows == 1 && rhs.cols == 3) {
             Vec2<T>::x = rhs[0][0];
             Vec2<T>::y = rhs[0][1];
@@ -989,21 +989,21 @@ public:
 
     Vec4(): w(0) {}
 
-    Vec4(T n): Vec3<T>(n), w(n) {}
+    Vec4(const T n): Vec3<T>(n), w(n) {}
 
-    Vec4(T x, T y, T z, T w): Vec3<T>(x, y, z), w(w) {}
-
-    template <typename U>
-    Vec4(U* v): Vec3<T>(v), w(v[3]) {}
+    Vec4(const T x, const T y, const T z, const T w): Vec3<T>(x, y, z), w(w) {}
 
     template <typename U>
-    Vec4(std::array<U, 4> &v): Vec3<T>(v[0], v[1], v[2]), w(v[3]) {}
+    Vec4(const U* v): Vec3<T>(v), w(v[3]) {}
 
     template <typename U>
-    Vec4(std::initializer_list<U> v): Vec3<T>(v), w(v.begin()[3]) {}
+    Vec4(const std::array<U, 4> &v): Vec3<T>(v[0], v[1], v[2]), w(v[3]) {}
 
     template <typename U>
-    Vec4(Matrix<U> &v) {
+    Vec4(const std::initializer_list<U> v): Vec3<T>(v), w(v.begin()[3]) {}
+
+    template <typename U>
+    Vec4(const Matrix<U> &v) {
         if (v.rows == 1 && v.cols == 4) {
             Vec2<T>::x = v[0][0];
             Vec2<T>::y = v[0][1];
@@ -1020,10 +1020,10 @@ public:
     }
 
     template <typename U>
-    Vec4(Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
+    Vec4(const Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
 
     template <typename U>
-    Vec4& operator = (Matrix<U> &rhs) {
+    Vec4& operator = (const Matrix<U> &rhs) {
         if (rhs.rows == 1 && rhs.cols == 4) {
             Vec2<T>::x = rhs[0][0];
             Vec2<T>::y = rhs[0][1];
