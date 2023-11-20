@@ -405,7 +405,7 @@ public:
 };
 
 template <typename T, typename U>
-Matrix<T> operator + (const Matrix<T> &lhs, Matrix<U> &rhs) {
+Matrix<T> operator + (const Matrix<T> &lhs, const Matrix<U> &rhs) {
     Matrix<T> r(lhs);
 
     r += rhs;
@@ -423,7 +423,7 @@ Matrix<T> operator + (const Matrix<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Matrix<T> operator - (const Matrix<T> &lhs, Matrix<U> &rhs) {
+Matrix<T> operator - (const Matrix<T> &lhs, const Matrix<U> &rhs) {
     Matrix<T> r(lhs);
 
     r -= rhs;
@@ -524,6 +524,21 @@ public:
     template <typename U>
     Vec2(Vec2<U> &v): x(v.x), y(v.y) {}
 
+    template <typename U>
+    Vec2& operator = (Matrix<U> &rhs) {
+        if (rhs.rows == 1 && rhs.cols == 2) {
+            x = rhs[0][0];
+            y = rhs[0][1];
+        } else if (rhs.rows == 2 && rhs.cols == 1) {
+            x = rhs[0][0];
+            y = rhs[1][0];
+        } else {
+            throw std::length_error("matrix size should be 1x2 or 2x1");
+        }
+
+        return *this;
+    }
+
     T& operator [] (const size_t i) {
         switch (i) {
             case 0:
@@ -547,7 +562,7 @@ public:
     }
 
     template <typename U>
-    Vec2<T>& operator += (const Vec2<U>& rhs) {
+    Vec2<T>& operator += (const Vec2<U> &rhs) {
         x += rhs.x;
         y += rhs.y;
 
@@ -631,7 +646,7 @@ public:
 };
 
 template <typename T, typename U>
-Vec2<T> operator + (Vec2<T> &lhs, Vec2<U> &rhs) {
+Vec2<T> operator + (const Vec2<T> &lhs, const Vec2<U> &rhs) {
     Vec2<T> r(lhs);
 
     r += rhs;
@@ -640,7 +655,7 @@ Vec2<T> operator + (Vec2<T> &lhs, Vec2<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec2<T> operator + (Vec2<T> &lhs, const U rhs) {
+Vec2<T> operator + (const Vec2<T> &lhs, const U rhs) {
     Vec2<T> r(lhs);
 
     r += rhs;
@@ -649,7 +664,7 @@ Vec2<T> operator + (Vec2<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec2<T> operator - (Vec2<T> &lhs, Vec2<U> &rhs) {
+Vec2<T> operator - (const Vec2<T> &lhs, const Vec2<U> &rhs) {
     Vec2<T> r(lhs);
 
     r -= rhs;
@@ -658,7 +673,7 @@ Vec2<T> operator - (Vec2<T> &lhs, Vec2<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec2<T> operator - (Vec2<T> &lhs, const U rhs) {
+Vec2<T> operator - (const Vec2<T> &lhs, const U rhs) {
     Vec2<T> r(lhs);
 
     r -= rhs;
@@ -667,7 +682,7 @@ Vec2<T> operator - (Vec2<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Matrix<T> operator * (Vec2<T> &lhs, Matrix<U> &rhs) {
+Matrix<T> operator * (const Vec2<T> &lhs, const Matrix<U> &rhs) {
     if (rhs.rows != 2) {
         throw std::length_error("rhs.rows should be equal to 2");
     }
@@ -685,12 +700,12 @@ Matrix<T> operator * (Vec2<T> &lhs, Matrix<U> &rhs) {
 }
 
 template <typename T, typename U>
-T operator * (Vec2<T> &lhs, Vec2<U> &rhs) {
+T operator * (const Vec2<T> &lhs, const Vec2<U> &rhs) {
     return lhs.x * rhs.x + lhs.y * rhs.y;
 }
 
 template <typename T, typename U>
-Vec2<T> operator * (Vec2<T> &lhs, const U rhs) {
+Vec2<T> operator * (const Vec2<T> &lhs, const U rhs) {
     Vec2<T> r(lhs);
 
     r *= rhs;
@@ -699,7 +714,7 @@ Vec2<T> operator * (Vec2<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec2<T> operator / (Vec2<T> &lhs, const U rhs) {
+Vec2<T> operator / (const Vec2<T> &lhs, const U rhs) {
     Vec2<T> r(lhs);
 
     r /= rhs;
@@ -752,6 +767,23 @@ public:
 
     template <typename U>
     Vec3(Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
+
+    template <typename U>
+    Vec3& operator = (Matrix<U> &rhs) {
+        if (rhs.rows == 1 && rhs.cols == 3) {
+            Vec2<T>::x = rhs[0][0];
+            Vec2<T>::y = rhs[0][1];
+            z = rhs[0][2];
+        } else if (rhs.rows == 3 && rhs.cols == 1) {
+            Vec2<T>::x = rhs[0][0];
+            Vec2<T>::y = rhs[1][0];
+            z = rhs[2][0];
+        } else {
+            throw std::length_error("matrix size should be 1x3 or 3x1");
+        }
+
+        return *this;
+    }
 
     T& operator [] (const size_t i) {
         switch (i) {
@@ -867,7 +899,7 @@ public:
 };
 
 template <typename T, typename U>
-Vec3<T> operator + (Vec3<T> &lhs, Vec3<U> &rhs) {
+Vec3<T> operator + (const Vec3<T> &lhs, const Vec3<U> &rhs) {
     Vec3<T> r(lhs);
 
     r += rhs;
@@ -876,7 +908,7 @@ Vec3<T> operator + (Vec3<T> &lhs, Vec3<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec3<T> operator + (Vec3<T> &lhs, const U rhs) {
+Vec3<T> operator + (const Vec3<T> &lhs, const U rhs) {
     Vec3<T> r(lhs);
 
     r += rhs;
@@ -885,7 +917,7 @@ Vec3<T> operator + (Vec3<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec3<T> operator - (Vec3<T> &lhs, Vec3<U> &rhs) {
+Vec3<T> operator - (const Vec3<T> &lhs, const Vec3<U> &rhs) {
     Vec3<T> r(lhs);
 
     r -= rhs;
@@ -894,7 +926,7 @@ Vec3<T> operator - (Vec3<T> &lhs, Vec3<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec3<T> operator - (Vec3<T> &lhs, const U rhs) {
+Vec3<T> operator - (const Vec3<T> &lhs, const U rhs) {
     Vec3<T> r(lhs);
 
     r -= rhs;
@@ -903,7 +935,7 @@ Vec3<T> operator - (Vec3<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Matrix<T> operator * (Vec3<T> &lhs, Matrix<U> &rhs) {
+Matrix<T> operator * (const Vec3<T> &lhs, const Matrix<U> &rhs) {
     if (rhs.rows != 3) {
         throw std::length_error("rhs.rows should be equal to 3");
     }
@@ -921,12 +953,12 @@ Matrix<T> operator * (Vec3<T> &lhs, Matrix<U> &rhs) {
 }
 
 template <typename T, typename U>
-T operator * (Vec3<T> &lhs, Vec3<U> &rhs) {
+T operator * (const Vec3<T> &lhs, const Vec3<U> &rhs) {
     return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 }
 
 template <typename T, typename U>
-Vec3<T> operator * (Vec3<T> &lhs, const U rhs) {
+Vec3<T> operator * (const Vec3<T> &lhs, const U rhs) {
     Vec3<T> r(lhs);
 
     r *= rhs;
@@ -935,7 +967,7 @@ Vec3<T> operator * (Vec3<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec3<T> operator / (Vec3<T> &lhs, const U rhs) {
+Vec3<T> operator / (const Vec3<T> &lhs, const U rhs) {
     Vec3<T> r(lhs);
 
     r /= rhs;
@@ -989,6 +1021,25 @@ public:
 
     template <typename U>
     Vec4(Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
+
+    template <typename U>
+    Vec4& operator = (Matrix<U> &rhs) {
+        if (rhs.rows == 1 && rhs.cols == 4) {
+            Vec2<T>::x = rhs[0][0];
+            Vec2<T>::y = rhs[0][1];
+            Vec3<T>::z = rhs[0][2];
+            w = rhs[0][3];
+        } else if (rhs.rows == 4 && rhs.cols == 1) {
+            Vec2<T>::x = rhs[0][0];
+            Vec2<T>::y = rhs[1][0];
+            Vec3<T>::z = rhs[2][0];
+            w = rhs[3][0];
+        } else {
+            throw std::length_error("matrix size should be 1x4 or 4x1");
+        }
+
+        return *this;
+    }
 
     T& operator [] (const size_t i) {
         switch (i) {
@@ -1057,7 +1108,7 @@ public:
     }
 
     template <typename U>
-    Vec3<T>& operator *= (const Matrix<U> &rhs) {
+    Vec4<T>& operator *= (const Matrix<U> &rhs) {
         if (rhs.rows != 4 && rhs.cols != 4) {
             throw std::length_error("matrix size should be 4x4");
         }
@@ -1111,7 +1162,7 @@ public:
 };
 
 template <typename T, typename U>
-Vec4<T> operator + (Vec4<T> &lhs, Vec4<U> &rhs) {
+Vec4<T> operator + (const Vec4<T> &lhs, const Vec4<U> &rhs) {
     Vec4<T> r(lhs);
 
     r += rhs;
@@ -1120,7 +1171,7 @@ Vec4<T> operator + (Vec4<T> &lhs, Vec4<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec4<T> operator + (Vec4<T> &lhs, const U rhs) {
+Vec4<T> operator + (const Vec4<T> &lhs, const U rhs) {
     Vec4<T> r(lhs);
 
     r += rhs;
@@ -1129,7 +1180,7 @@ Vec4<T> operator + (Vec4<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec4<T> operator - (Vec4<T> &lhs, Vec4<U> &rhs) {
+Vec4<T> operator - (const Vec4<T> &lhs, const Vec4<U> &rhs) {
     Vec4<T> r(lhs);
 
     r -= rhs;
@@ -1138,7 +1189,7 @@ Vec4<T> operator - (Vec4<T> &lhs, Vec4<U> &rhs) {
 }
 
 template <typename T, typename U>
-Vec4<T> operator - (Vec4<T> &lhs, const U rhs) {
+Vec4<T> operator - (const Vec4<T> &lhs, const U rhs) {
     Vec4<T> r(lhs);
 
     r -= rhs;
@@ -1147,7 +1198,7 @@ Vec4<T> operator - (Vec4<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Matrix<T> operator * (Vec4<T> &lhs, Matrix<U> &rhs) {
+Matrix<T> operator * (const Vec4<T> &lhs, const Matrix<U> &rhs) {
     if (rhs.rows != 4) {
         throw std::length_error("rhs.rows should be equal to 4");
     }
@@ -1165,12 +1216,12 @@ Matrix<T> operator * (Vec4<T> &lhs, Matrix<U> &rhs) {
 }
 
 template <typename T, typename U>
-T operator * (Vec4<T> &lhs, Vec4<U> &rhs) {
+T operator * (const Vec4<T> &lhs, const Vec4<U> &rhs) {
     return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
 }
 
 template <typename T, typename U>
-Vec4<T> operator * (Vec4<T> &lhs, const U rhs) {
+Vec4<T> operator * (const Vec4<T> &lhs, const U rhs) {
     Vec4<T> r(lhs);
 
     r *= rhs;
@@ -1179,7 +1230,7 @@ Vec4<T> operator * (Vec4<T> &lhs, const U rhs) {
 }
 
 template <typename T, typename U>
-Vec4<T> operator / (Vec4<T> &lhs, const U rhs) {
+Vec4<T> operator / (const Vec4<T> &lhs, const U rhs) {
     Vec4<T> r(lhs);
 
     r /= rhs;
