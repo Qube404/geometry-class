@@ -279,6 +279,12 @@ void test_vec2() {
 
     cout << "n: " << endl << n << endl;
     cout << "n / 2: " << n / 2 << endl << endl;
+
+    Matrix<float> mm({
+        {1, 2},
+        {3, 4}
+    });
+    Vec2f vec = u * mm;
 }
 
 void test_vec3() {
@@ -505,8 +511,10 @@ void test_vec4() {
 }
 
 int main() {
+    test_vec2();
+
     Vec4f v(1, 2, 3, 4);
-    Matrix<float> m(1, 4);
+    Matrix<float> m(4, 4);
 
     v = v * m;
 }

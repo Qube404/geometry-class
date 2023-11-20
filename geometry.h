@@ -7,8 +7,6 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "print.h"
-
 template <typename T, typename U>
 T dot(std::vector<T> &lhs, std::vector<U> &rhs) {
     if (lhs.size() != rhs.size()) {
@@ -506,7 +504,7 @@ public:
     Vec2(const std::array<U, 2> &v): x(v[0]), y(v[1]) {}
 
     template <typename U>
-    Vec2(const std::initializer_list<U> v): x(v.begin()[0]), y(v.begin()[1]) {}
+    Vec2(const std::initializer_list<U> &v): x(v.begin()[0]), y(v.begin()[1]) {}
 
     template <typename U>
     Vec2(const Matrix<U> &v) {
@@ -599,16 +597,14 @@ public:
             throw std::length_error("matrix size should be 2x2");
         }
 
-        Vec2<T> r(1, 2);
-
         std::vector<T> row({x, y});
         for (size_t i = 0; i != 2; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i]});
 
-            r[0][i] = dot(row, col);
+            *this[i] = dot(row, col);
         }
 
-        return r;
+        return *this;
     }
 
     Vec2<T>& operator *= (const T rhs) {
@@ -851,16 +847,14 @@ public:
             throw std::length_error("matrix size should be 3x3");
         }
 
-        Vec3<T> r(1, 3);
-
         std::vector<T> row({Vec2<T>::x, Vec2<T>::y, z});
         for (size_t i = 0; i != 3; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i]});
 
-            r[0][i] = dot(row, col);
+            *this[i] = dot(row, col);
         }
 
-        return r;
+        return *this;
     }
 
     Vec3<T>& operator *= (const T rhs) {
@@ -1113,16 +1107,14 @@ public:
             throw std::length_error("matrix size should be 4x4");
         }
 
-        Vec4<T> r(1, 4);
-
         std::vector<T> row({Vec2<T>::x, Vec2<T>::y, Vec3<T>::z, w});
         for (size_t i = 0; i != 4; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i], rhs[3][i]});
 
-            r[0][i] = dot(row, col);
+            *this[i] = dot(row, col);
         }
 
-        return r;
+        return *this;
     }
 
     Vec4<T>& operator *= (const T rhs) {
