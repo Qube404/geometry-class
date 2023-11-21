@@ -1,4 +1,4 @@
-com = clang++
+com = g++
 std = -std=c++17
 flags = -g
 

@@ -46,25 +46,35 @@ public:
 
     Matrix(): m(1, std::vector<T>(1, 0)), rows(1), cols(1) {}
 
-    Matrix(size_t size): m(size, std::vector<T>(size)), rows(size), cols(size) {
+    Matrix(const size_t size): m(size, std::vector<T>(size)), rows(size), cols(size) {
         for (int i = 0; i != size; i++) {
             m[i][i] = 1;
         }
     }
 
-    Matrix(size_t rows, size_t cols): m(rows, std::vector<T>(cols, 0)), rows(rows), cols(cols) {}
+    Matrix(const size_t rows, const size_t cols): 
+        m(rows, std::vector<T>(cols, 0)), rows(rows), cols(cols) 
+    {}
 
-    Matrix(size_t rows, size_t cols, T n): m(rows, std::vector<T>(cols, n)), rows(rows), cols(cols) {}
+    Matrix(const size_t rows, const size_t cols, const T n): 
+        m(rows, std::vector<T>(cols, n)), rows(rows), cols(cols) 
+    {}
 
-    Matrix(T* v, size_t s): m(1, std::vector<T>(v, v + s)), rows(1), cols(s) {}
+    Matrix(const T* v, const size_t s): m(1, std::vector<T>(v, v + s)), rows(1), cols(s) {}
 
     template <size_t S>
-    Matrix(std::array<T, S> &v): m(1, std::vector<T>(v.begin(), v.end())), rows(1), cols(v.size()) {}
+    Matrix(const std::array<T, S> &v): 
+        m(1, std::vector<T>(v.begin(), v.end())), rows(1), cols(v.size()) 
+    {}
 
-    Matrix(std::initializer_list<T> v): m(1, std::vector<T>(v.begin(), v.end())), rows(1), cols(v.size()) {}
+    Matrix(const std::initializer_list<T> &v): 
+        m(1, std::vector<T>(v.begin(), v.end())), rows(1), cols(v.size()) 
+    {}
 
     template <size_t C>
-    Matrix(T v[][C], size_t rows, size_t cols): m(rows, std::vector<T>(cols)), rows(rows), cols(cols) {
+    Matrix(const T v[][C], const size_t rows, const size_t cols): 
+        m(rows, std::vector<T>(cols)), rows(rows), cols(cols) 
+    {
         for (size_t i = 0; i != rows; i++) {
             for (size_t j = 0; j != cols; j++) {
                 m[i][j] = v[i][j];
@@ -73,7 +83,9 @@ public:
     }
 
     template <size_t R, size_t C>
-    Matrix(std::array<std::array<T, C>, R> &v): m(R, std::vector<T>(C)), rows(v.size()), cols(v.begin()->size()) {
+    Matrix(const std::array<std::array<T, C>, R> &v): 
+        m(R, std::vector<T>(C)), rows(v.size()), cols(v.begin()->size()) 
+    {
         for (size_t i = 0; i != R; i++) {
             for (size_t j = 0; j != C; j++) {
                 m[i][j] = v[i][j];
@@ -85,7 +97,7 @@ public:
     Matrix(Vec3<T> &v);
     Matrix(Vec4<T> &v);
 
-    Matrix(std::initializer_list<std::initializer_list<T>> v): 
+    Matrix(const std::initializer_list<std::initializer_list<T>> &v): 
         m(v.size(), std::vector<T>(v.begin()->size())), 
         rows(v.size()), 
         cols(v.begin()->size()) 
@@ -486,6 +498,7 @@ std::ostream& operator << (std::ostream &os, const Matrix<T> &m) {
     return os;
 }
 
+// Vec2
 template <typename T>
 class Vec2 {
 public:
@@ -601,7 +614,7 @@ public:
         for (size_t i = 0; i != 2; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i]});
 
-            *this[i] = dot(row, col);
+            this[i] = dot(row, col);
         }
 
         return *this;
@@ -744,7 +757,7 @@ public:
     Vec3(const std::array<U, 3> &v): Vec2<T>(v[0], v[1]), z(v[2]) {}
 
     template <typename U>
-    Vec3(const std::initializer_list<U> v): Vec2<T>(v), z(v.begin()[2]) {}
+    Vec3(const std::initializer_list<U> &v): Vec2<T>(v), z(v.begin()[2]) {}
 
     template <typename U>
     Vec3(const Matrix<U> &v) {
@@ -851,7 +864,7 @@ public:
         for (size_t i = 0; i != 3; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i]});
 
-            *this[i] = dot(row, col);
+            this[i] = dot(row, col);
         }
 
         return *this;
@@ -994,7 +1007,7 @@ public:
     Vec4(const std::array<U, 4> &v): Vec3<T>(v[0], v[1], v[2]), w(v[3]) {}
 
     template <typename U>
-    Vec4(const std::initializer_list<U> v): Vec3<T>(v), w(v.begin()[3]) {}
+    Vec4(const std::initializer_list<U> &v): Vec3<T>(v), w(v.begin()[3]) {}
 
     template <typename U>
     Vec4(const Matrix<U> &v) {
@@ -1111,7 +1124,7 @@ public:
         for (size_t i = 0; i != 4; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i], rhs[3][i]});
 
-            *this[i] = dot(row, col);
+            this[i] = dot(row, col);
         }
 
         return *this;
