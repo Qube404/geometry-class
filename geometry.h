@@ -535,21 +535,6 @@ public:
     template <typename U>
     Vec2(const Vec2<U> &v): x(v.x), y(v.y) {}
 
-    template <typename U>
-    Vec2& operator = (const Matrix<U> &rhs) {
-        if (rhs.rows == 1 && rhs.cols == 2) {
-            x = rhs[0][0];
-            y = rhs[0][1];
-        } else if (rhs.rows == 2 && rhs.cols == 1) {
-            x = rhs[0][0];
-            y = rhs[1][0];
-        } else {
-            throw std::length_error("matrix size should be 1x2 or 2x1");
-        }
-
-        return *this;
-    }
-
     T& operator [] (const size_t i) {
         switch (i) {
             case 0:
@@ -776,23 +761,6 @@ public:
 
     template <typename U>
     Vec3(const Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
-
-    template <typename U>
-    Vec3& operator = (const Matrix<U> &rhs) {
-        if (rhs.rows == 1 && rhs.cols == 3) {
-            Vec2<T>::x = rhs[0][0];
-            Vec2<T>::y = rhs[0][1];
-            z = rhs[0][2];
-        } else if (rhs.rows == 3 && rhs.cols == 1) {
-            Vec2<T>::x = rhs[0][0];
-            Vec2<T>::y = rhs[1][0];
-            z = rhs[2][0];
-        } else {
-            throw std::length_error("matrix size should be 1x3 or 3x1");
-        }
-
-        return *this;
-    }
 
     T& operator [] (const size_t i) {
         switch (i) {
@@ -1028,25 +996,6 @@ public:
 
     template <typename U>
     Vec4(const Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
-
-    template <typename U>
-    Vec4& operator = (const Matrix<U> &rhs) {
-        if (rhs.rows == 1 && rhs.cols == 4) {
-            Vec2<T>::x = rhs[0][0];
-            Vec2<T>::y = rhs[0][1];
-            Vec3<T>::z = rhs[0][2];
-            w = rhs[0][3];
-        } else if (rhs.rows == 4 && rhs.cols == 1) {
-            Vec2<T>::x = rhs[0][0];
-            Vec2<T>::y = rhs[1][0];
-            Vec3<T>::z = rhs[2][0];
-            w = rhs[3][0];
-        } else {
-            throw std::length_error("matrix size should be 1x4 or 4x1");
-        }
-
-        return *this;
-    }
 
     T& operator [] (const size_t i) {
         switch (i) {

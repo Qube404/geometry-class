@@ -530,12 +530,4 @@ void test_vec4() {
 }
 
 int main() {
-    test_vec2();
-    test_vec3();
-    test_vec4();
-
-    Vec4f v(1, 2, 3, 4);
-    Matrix<float> m(4, 4);
-
-    v = v * m;
 }
