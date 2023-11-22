@@ -211,6 +211,12 @@ void test_vec2() {
     Vec2<float> n(m);
     cout << "n: " << n << endl << endl;
 
+    Vec3<float> mo(3, 4, 5);
+    cout << "Vec3f mo: " << mo << endl << endl;
+
+    Vec2<float> om(mo);
+    cout << "om: " << om << endl << endl;
+
     Vec2<int> o(m);
     cout << "o: " << o << endl << endl;
 
@@ -321,6 +327,18 @@ void test_vec3() {
 
     Vec3<float> n(m);
     cout << "n: " << n << endl << endl;
+
+    Vec2<float> mo(3, 2);
+    cout << "Vec2f mo: " << mo << endl << endl;
+
+    Vec3<float> om(mo);
+    cout << "om: " << om << endl << endl;
+
+    Vec4<float> no(4, 5, 6, 7);
+    cout << "Vec4f no: " << no << endl << endl;
+
+    Vec3<float> on(no);
+    cout << "on: " << on << endl << endl;
 
     Vec3<int> o(m);
     cout << "o: " << o << endl << endl;
@@ -439,6 +457,12 @@ void test_vec4() {
     Vec4<float> n(m);
     cout << "n: " << n << endl << endl;
 
+    Vec3<float> mo(5, 6, 4);
+    cout << "Vec3f mo: " << mo << endl << endl;
+
+    Vec4<float> om(mo);
+    cout << "om: " << om << endl << endl;
+
     Vec4<int> o(m);
     cout << "o: " << o << endl << endl;
 
@@ -530,4 +554,14 @@ void test_vec4() {
 }
 
 int main() {
+    using namespace std;
+
+    cout << "Vec2: " << endl;
+    test_vec2();
+
+    cout << "Vec3: " << endl;
+    test_vec3();
+
+    cout << "Vec4: " << endl;
+    test_vec4();
 }

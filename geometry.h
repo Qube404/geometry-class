@@ -532,6 +532,8 @@ public:
         }
     }
 
+    Vec2(const Vec3<T> &v);
+
     template <typename U>
     Vec2(const Vec2<U> &v): x(v.x), y(v.y) {}
 
@@ -599,7 +601,7 @@ public:
         for (size_t i = 0; i != 2; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i]});
 
-            this[i] = dot(row, col);
+            (*this)[i] = dot(row, col);
         }
 
         return *this;
@@ -759,6 +761,10 @@ public:
         }
     }
 
+    Vec3(const Vec2<T> &v);
+
+    Vec3(const Vec4<T> &v);
+
     template <typename U>
     Vec3(const Vec3<U> &v): Vec2<T>(v.x, v.y), z(v.z) {}
 
@@ -832,7 +838,7 @@ public:
         for (size_t i = 0; i != 3; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i]});
 
-            this[i] = dot(row, col);
+            (*this)[i] = dot(row, col);
         }
 
         return *this;
@@ -994,6 +1000,8 @@ public:
         }
     }
 
+    Vec4(const Vec3<T> &v);
+
     template <typename U>
     Vec4(const Vec4<U> &v): Vec3<T>(v.x, v.y, v.z), w(v.w) {}
 
@@ -1073,7 +1081,7 @@ public:
         for (size_t i = 0; i != 4; i++) {
             std::vector<U> col({rhs[0][i], rhs[1][i], rhs[2][i], rhs[3][i]});
 
-            this[i] = dot(row, col);
+            (*this)[i] = dot(row, col);
         }
 
         return *this;
@@ -1206,6 +1214,18 @@ Matrix<T>::Matrix(Vec3<T> &v): m({v.x, v.y, v.z}), rows(1), cols(3) {}
 
 template <typename T>
 Matrix<T>::Matrix(Vec4<T> &v): m({v.x, v.y, v.z, v.w}), rows(1), cols(4) {}
+
+template <typename T>
+Vec2<T>::Vec2(const Vec3<T> &v): x(v.x/v.z), y(v.y/v.z) {}
+
+template <typename T>
+Vec3<T>::Vec3(const Vec2<T> &v): Vec2<T>(v.x, v.y), z(1) {}
+
+template <typename T>
+Vec3<T>::Vec3(const Vec4<T> &v): Vec2<T>(v.x/v.w, v.y/v.w), z(v.z/v.w) {}
+
+template <typename T>
+Vec4<T>::Vec4(const Vec3<T> &v): Vec3<T>(v.x, v.y, v.z), w(1) {}
 
 typedef Vec2<int> Vec2i;
 typedef Vec2<float> Vec2f;
